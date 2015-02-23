@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<meta charset="UTF-8">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="jquery.facedetection.min.js"></script>
+	<script type="text/javascript" src="rhill-voronoi-core.min.js"></script>
+</head>
+<body>
+	<div id="settings">
+		<ol>
+		<li>Press to reset and detect faces automatically. <strong>WARNING:</strong> This might take some time.
+		<input id="detectfaces" disabled="true" type="button" value="Detect Faces"/>
+		</li>
+		<li>Click to add a new point or Ctrl+Click to remove the closest point.</li>
+		<li>Press to switch to a printable mask mode.
+		<input id="printview" disabled="true" type="button" value="print view"/>
+		</li>
+		<li>Right click &gt; Save Image</li>
+		</ol>
+	</div>
+	<div id="content">
+		<canvas id="canvas" width="800px" height="600px"></canvas>
+		<img id="picture" src="test.jpg"/>
+	</div>
+	<script src="init.js"></script>
+</body>
+</html>

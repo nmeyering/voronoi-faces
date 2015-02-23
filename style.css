@@ -1,0 +1,48 @@
+html, body
+{
+	height: 100%;
+}
+
+body
+{
+	padding: 0;
+	margin: 0;
+	background-color: #444;
+}
+
+#content
+{
+	margin-left: auto;
+	margin-right: auto;
+	height: 100%;
+}
+
+#canvas
+{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	border: 1px solid black;
+	/*box-shadow: 5px 5px 25px #888;
+	border-radius: 5px;
+	*/
+}
+
+#picture
+{
+	display: none;
+}
+
+#settings
+{
+	background-color: #222;
+	color: #aaa;
+	top: 1em;
+	left: 1em;
+	width: 100%;
+}
+
+#settings > p
+{
+	margin: 1em 1em 1em 1em;
+}
