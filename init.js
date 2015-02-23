@@ -156,7 +156,7 @@ canvas.addEventListener('click',function(e){
 	var rect = canvas.getBoundingClientRect();
 	var cx = e.clientX - rect.left;
 	var cy = e.clientY - rect.top;
-	if (e.ctrlKey) {
+	if (e.ctrlKey || e.metaKey) {
 		removeClosest(faces, {x: cx, y: cy});
 	}
 	else {
