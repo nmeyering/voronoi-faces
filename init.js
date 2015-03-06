@@ -3,6 +3,16 @@ var FaceApp = {
 	canvas : null, // (!)
 	ctx : null, // (!)
 	faces : [],
+	printView: false,
+	sortFaces : function()
+	{
+		this.faces.sort(function(f1, f2){
+			return (f1.y * 100 + f1.x)
+					-
+					(f2.y * 100 + f2.x);
+		});
+	},
+
 	drawImage : function()
 	{
 		console.log("drawing image");
@@ -121,9 +131,14 @@ var FaceApp = {
 	detectFaces : function(e){
 		var that = this;
 		console.log("detecting faces");
+		console.log(e.target);
 		e.target.disabled = true;
 
 		$('#picture').faceDetection({
+			async: true,
+			grayscale: false,
+			minNeighbors: 1,
+			interval: 10,
 			complete: function (f) {
 				f.forEach(function(fc){
 					fc.x = fc.x + fc.width / 2;
@@ -151,11 +166,15 @@ var FaceApp = {
 		var printButton = document.getElementById('printview');
 		printButton.disabled = false;
 
-		var redraw = function(){
-			this.draw(true);
+		var toggle = function(){
+			this.printView = !this.printView;
+
+			this.sortFaces();
+			this.draw(this.printView);
+			printButton.value = (this.printView ? "edit" : "print") + " view";
 		};
 
-		printButton.addEventListener('click', redraw.bind(this));
+		printButton.addEventListener('click', toggle.bind(this));
 
 		var onClick = function(e){
 			var rect = this.canvas.getBoundingClientRect();
@@ -167,7 +186,7 @@ var FaceApp = {
 			else {
 				this.faces.push({x: cx, y: cy, width: 0, height: 0, confidence: 10});
 			}
-			this.draw();
+			this.draw(this.printView);
 		};
 
 		this.canvas.addEventListener('click', onClick.bind(this));
