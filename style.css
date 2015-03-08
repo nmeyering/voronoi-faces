@@ -8,6 +8,7 @@ body
 	padding: 0;
 	margin: 0;
 	background-color: #444;
+	font-family:  "PT Sans", "Sans";
 }
 
 #content
@@ -15,17 +16,25 @@ body
 	margin-left: auto;
 	margin-right: auto;
 	height: 100%;
+	width: 100%;
+	display: table-row;
+}
+#content > *
+{
+	display: table-cell;
+	vertical-align: top;
+	float: left;
+	margin: 1em;
+	border: 3px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 5px 5px 25px #222;
 }
 
 #canvas
 {
+	display: inline-block;
 	margin-left: auto;
 	margin-right: auto;
-	display: block;
-	border: 1px solid black;
-	/*box-shadow: 5px 5px 25px #888;
-	border-radius: 5px;
-	*/
 }
 
 #picture
@@ -35,14 +44,36 @@ body
 
 #settings
 {
+	width: 25%;
+	display: inline-block;
 	background-color: #222;
+	font-size: 14pt;
 	color: #aaa;
-	top: 1em;
-	left: 1em;
-	width: 100%;
 }
 
-#settings > p
+#settings > *
 {
-	margin: 1em 1em 1em 1em;
+	margin-left: 1em;
 }
+
+#settings > ol > li
+{
+	margin: 1em;
+}
+
+
+input[type="button"],input[type="file"]
+{
+	font-size: 12pt;
+}
+
+.divider
+{
+	margin-left: 1em;
+	margin-right: 1em;
+	background: #fff;
+	height: 0px;
+	border: 3px solid #ccc;
+	border-radius: 5px;
+}
+

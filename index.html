@@ -5,28 +5,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="jquery.facedetection.min.js"></script>
 	<script type="text/javascript" src="rhill-voronoi-core.min.js"></script>
+	<script type="text/javascript" src="FileSaver.min.js"></script>
 </head>
 <body>
-	<div id="settings">
-		<ol>
-		<li>Press to reset and detect faces automatically. <strong>WARNING:</strong> This might take some time.
-		<input id="detectfaces" disabled="true" type="button" value="Detect Faces"/>
-		</li>
-		<li>Click to add a new point or Ctrl+Click (Cmd+Click) to remove the closest point.</li>
-		<li>Press to switch to a printable mask mode.
-		<input id="printview" disabled="true" type="button" value="print view"/>
-		</li>
-		<li>Right click &gt; Save Image</li>
-		</ol>
-	</div>
 	<div id="content">
-		<canvas id="canvas" width="800px" height="600px"></canvas>
-		<img id="picture" src="test.jpg"/>
+		<div id="settings">
+			<h3>How to use this tool:</h3>
+			<ol>
+			<li>Press to reset and detect faces automatically. <strong>WARNING:</strong>
+				This might take some time. <br/>
+			<input id="detectfaces" disabled="disabled" type="button" value="Detect Faces"/>
+			</li>
+			<li>Click to add a new point or Ctrl+Click (Cmd+Click) to remove the closest point.</li>
+			<li>Press to switch to a printable mask mode. <br/>
+			<input id="printview" disabled="disabled" type="button" value="print view"/>
+			</li>
+			<li>Right click &gt; Save Image</li>
+			</ol>
+			<div class="divider"></div>
+			<p><input id="savefile" type="button" value="Save as JSON"/></p>
+			<p><input id="loadfile" type="file" value="Load from JSON"/></p>
+		</div>
+		<canvas id="canvas" width="800" height="600"></canvas>
 	</div>
+	<img id="picture" src="crop.jpg"/>
 	<script src="init.js"></script>
 </body>
 </html>
