@@ -8,7 +8,7 @@ body
 	padding: 0;
 	margin: 0;
 	background-color: #444;
-	font-family:  "PT Sans", "Sans";
+	font-family: "PT Sans", "Sans";
 }
 
 #content
@@ -32,7 +32,6 @@ body
 
 #canvas
 {
-	display: inline-block;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -44,8 +43,7 @@ body
 
 #settings
 {
-	width: 25%;
-	display: inline-block;
+	width: 15%;
 	background-color: #222;
 	font-size: 14pt;
 	color: #aaa;

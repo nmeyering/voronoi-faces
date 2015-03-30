@@ -1,7 +1,9 @@
 class FaceApp
 	constructor: (@canvas, @picture) ->
+		# FIXME this can sometimes fail
 		@picture.load =>
 			pic = @picture[0]
+			pic.crossOrigin = "Anonymous"
 			@canvas[0].width = pic.naturalWidth
 			@canvas[0].height = pic.naturalHeight
 			@canvas.width pic.naturalWidth
@@ -9,9 +11,22 @@ class FaceApp
 			@drawImage()
 		@ctx = @canvas[0].getContext('2d')
 		@faces = []
+		@cells = []
+		@diagram = null
 		@printView = false
 
+		@update()
+
 		@init()
+
+	update: =>
+		@doVoronoi()
+		@sortFaces()
+		@draw @printView
+
+	resetData: () =>
+		@faces = []
+		@update()
 
 	sortFaces: =>
 		score = (face) ->
@@ -19,20 +34,23 @@ class FaceApp
 		@faces.sort((a, b) ->
 			score(a) - score(b)
 		)
+		@faces.forEach (face, index) ->
+			face.voronoiId = index + 1
+		#(face.voronoiId = index + 1 for face, index in @faces)# 1-based indices
 	
 	drawImage: =>
 		# get the actual dom element from jquery object
 		pic = @picture[0]
 		@ctx.drawImage pic, 0, 0
 
-	drawEdges: (edges, style) =>
+	drawEdges: (style) =>
 		if (@faces.length == 0)
 			return
 		@ctx.lineWidth = 2
 		@ctx.strokeStyle = style ? "#0f0"
 
 		@ctx. beginPath()
-		edges.forEach((edge) =>
+		@diagram.edges.forEach((edge) =>
 			@ctx.moveTo(edge.va.x, edge.va.y)
 			@ctx.lineTo(edge.vb.x, edge.vb.y)
 		)
@@ -46,23 +64,24 @@ class FaceApp
 		if (print)
 			@drawMask()
 
-		bbox = {
-			xl: 0,
-			xr: @canvas.width(),
-			yt: 0,
-			yb: @canvas.height()
-		}
-
-		voronoi = new Voronoi()
-		sites = ({x: f.x, y: f.y} for f in @faces)
-		result = voronoi.compute(sites, bbox)
-
-		@drawEdges(result.edges, if print then "#000" else "#fff")
+		@drawEdges(if print then "#000" else "#fff")
 
 		if (!print)
 			@drawMarkers()
 		if (print)
 			@drawNumbers()
+
+	drawCells: (style) =>
+		@ctx.strokeStyle = style
+		@cells.forEach (cell) =>
+			poly = cell.points
+			@ctx.beginPath()
+			return if poly.length == 0
+			@ctx.moveTo poly[0].x, poly[0].y
+			poly.forEach (point) =>
+				@ctx.lineTo point.x, point.y
+			@ctx.closePath()
+			@ctx.stroke()
 
 	drawNumbers: =>
 		ctx = @ctx
@@ -73,11 +92,10 @@ class FaceApp
 
 		rect = @canvas[0].getBoundingClientRect()
 
-		@faces.forEach (face, idx) ->
-			ctx.fillText idx, face.x, face.y
+		(ctx.fillText face.voronoiId, face.x, face.y for face in @faces)
 
 	drawMask: =>
-		@ctx.fillStyle = "rgba(255,255,255,0.75)"
+		@ctx.fillStyle = "rgba(255,255,255,0.5)"
 		@ctx.fillRect(0,0,@canvas.width(),@canvas.height())
 
 	drawMarkers: =>
@@ -96,6 +114,30 @@ class FaceApp
 			ctx.fill()
 			ctx.stroke()
 		)
+	
+	doVoronoi: =>
+		bbox = {
+			xl: 0,
+			xr: @canvas.width(),
+			yt: 0,
+			yb: @canvas.height()
+		}
+
+		voronoi = new Voronoi()
+		sites = ({x: f.x, y: f.y} for f in @faces)
+		@diagram = voronoi.compute(sites, bbox)
+		@cells = (
+			{
+				id: cell.site.voronoiId
+				x: cell.site.x
+				y: cell.site.y
+				points: _.flatten (
+					[
+						{x:he.getStartpoint().x>>0, y:he.getStartpoint().y>>0},
+						{x:he.getEndpoint().x>>0, y:he.getEndpoint().y>>0}
+					] for he in cell.halfedges
+				)
+			} for cell in @diagram.cells)
 
 	removeClosest: (faces, pos) =>
 		dist = (a, b) ->
@@ -118,11 +160,14 @@ class FaceApp
 	detectFaces: (e) =>
 		e.target.disabled = true
 
+		@resetData()
+		@draw()
+
 		@picture.faceDetection({
-			async: true
+			async: false
 			grayscale: false
 			minNeighbors: 1
-			interval: 8
+			interval: 6
 			complete: (f) =>
 				f.forEach (fc) =>
 					@faces.push {
@@ -130,12 +175,12 @@ class FaceApp
 						y: (fc.y + fc.height / 2) >> 0
 					}
 				e.target.disabled = false
-				@draw()
+				@update()
 			error: (code, msg) ->
 				console.log 'Oh no! Error ' + code + ' occurred. The message was "' + msg + '".'
 		})
 
-	# no fat arrow, will only be called once, and not as a callback
+	# no fat arrow, will not be called as a callback
 	init: ->
 		button = $('#detectfaces')
 		button.prop 'disabled', false
@@ -145,14 +190,12 @@ class FaceApp
 
 		toggle = =>
 			@printView = !@printView
-
-			@sortFaces()
-			@draw @printView
-			printButton.attr('value', (if @printView then "edit" else "print") + " view")
+			@update()
+			printButton.attr 'value', (if @printView then "edit" else "print") + " view"
 
 		printButton.click toggle
 
-		onClick = (e) =>
+		addOrRemoveSite = (e) =>
 			rect = @canvas[0].getBoundingClientRect()
 			cx = (e.clientX - rect.left) >> 0
 			cy = (e.clientY - rect.top) >> 0
@@ -162,9 +205,45 @@ class FaceApp
 			else
 				@faces.push({x: cx, y: cy, width: 0, height: 0})
 
-			@draw @printView
+			@update()
 
-		@canvas.click onClick
+		@canvas.click addOrRemoveSite
+
+		$('#savehtml').click =>
+			polys = (
+				'<area shape="poly" coords="' +
+					(_.flatten ([p.x, p.y] for p in poly.points)) +
+				'" href="javascript:;" data-id="' +
+					poly.id +
+				'" data-x="' +
+					poly.x +
+				'" data-y="' +
+					poly.y +
+				'" />\n' for poly in @cells)
+			foo = new Blob polys, {type: "text/html;charset=utf-8"}
+			saveAs foo, "areas.html"
+
+		$('#savefile').click =>
+			facesPlusIds = (
+				{
+					x: f.x,
+					y: f.y,
+					id: f.voronoiId
+				} for f in @faces
+			)
+			foo = new Blob [JSON.stringify(facesPlusIds, null, 2)], {type: "application/json;charset=utf-8"}
+			saveAs foo, "faces.json"
+
+		$('#loadfile').change (e) =>
+			file = e.target.files[0]
+			unless file?
+				return
+			reader = new FileReader()
+			reader.onload = (e) =>
+				contents = e.target.result
+				@faces = JSON.parse contents
+				@update()
+			reader.readAsText file
 
 $(document).ready ->
 	new FaceApp($('#canvas'), $('#picture'))

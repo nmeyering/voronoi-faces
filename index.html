@@ -9,30 +9,47 @@
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="jquery.facedetection.min.js"></script>
+	<script type="text/javascript" src="underscore-min.js"></script>
 	<script type="text/javascript" src="rhill-voronoi-core.min.js"></script>
 	<script type="text/javascript" src="FileSaver.min.js"></script>
 </head>
 <body>
 	<div id="content">
 		<div id="settings">
-			<h3>How to use this tool:</h3>
+			<h2>Usage</h2>
+			<p>
+			This is a tool to help you tag faces in a photo and and automatically define image regions to be used to associate with names, e.g. to display them when hovering over.
+			</p>
 			<ol>
-			<li>Press to reset and detect faces automatically. <strong>WARNING:</strong>
-				This might take some time. <br/>
-			<input id="detectfaces" disabled="disabled" type="button" value="Detect Faces"/>
-			</li>
-			<li>Click to add a new point or Ctrl+Click (Cmd+Click) to remove the closest point.</li>
-			<li>Press to switch to a printable mask mode. <br/>
-			<input id="printview" disabled="disabled" type="button" value="print view"/>
-			</li>
-			<li>Right click &gt; Save Image</li>
+				<li>
+					Press to reset and detect faces automatically. <strong>WARNING:</strong>
+					This might take some time. <br/>
+					<input id="detectfaces" disabled="disabled" type="button" value="Detect Faces"/>
+				</li>
+				<li>
+					Click to add a new point or Ctrl+Click (Cmd+Click) to remove the closest point.</li>
+				<li>
+					Press to switch to a printable mask mode. <br/>
+					<p><input id="printview" disabled="disabled" type="button" value="print view"/></p>
+				</li>
+				<li>Right click &gt; Save Image</li>
 			</ol>
 			<div class="divider"></div>
-			<p><input id="savefile" type="button" value="Save as JSON"/></p>
-			<p><input id="loadfile" type="file" value="Load from JSON"/></p>
+			<p>
+				<input id="savehtml" type="button" value="Save Map HTML"/>
+			</p>
+			<p>
+				<emph>Export</emph> to a file:
+				<input id="savefile" type="button" value="Save as JSON"/>
+			</p>
+			<p>
+				<emph>Import</emph> from one:
+				<input id="loadfile" type="file" accept="application/json" value="Load from JSON"/>
+			</p>
 		</div>
 		<canvas id="canvas" width="800" height="600"></canvas>
 	</div>
+	<map name="facemap" id="facemap"></map>
 	<img id="picture" src="crop.jpg"/>
 	<script src="init.js"></script>
 </body>
