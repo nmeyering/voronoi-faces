@@ -285,8 +285,8 @@
               for (_i = 0, _len = f.length; _i < _len; _i++) {
                 face = f[_i];
                 _results.push({
-                  x: face.x + face.width / 2,
-                  y: face.y + face.height / 2
+                  x: (face.x + face.width / 2) << 0,
+                  y: (face.y + face.height / 2) << 0
                 });
               }
               return _results;
@@ -374,7 +374,6 @@
       $('#savehtml').click((function(_this) {
         return function() {
           var cell, polys;
-          console.dir(_this.cells);
           polys = (function() {
             var _i, _len, _ref, _results;
             _ref = this.cells;
@@ -391,7 +390,7 @@
             return _results;
           }).call(_this);
           return $.get('template.html', function(template) {
-            var areas, image_src, n, namelis, output, p, pt, x;
+            var areas, image_src, n, namelis, output, p, pt;
             areas = (function() {
               var _i, _len, _results;
               _results = [];
@@ -403,15 +402,7 @@
                   _results1 = [];
                   for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                     pt = _ref[_j];
-                    _results1.push((function() {
-                      var _k, _len2, _results2;
-                      _results2 = [];
-                      for (_k = 0, _len2 = pt.length; _k < _len2; _k++) {
-                        x = pt[_k];
-                        _results2.push(x << 0);
-                      }
-                      return _results2;
-                    })());
+                    _results1.push(pt << 0);
                   }
                   return _results1;
                 })()) + '"' + ' data-id="' + p.id + '"' + ' data-x="' + p.x + '"' + ' data-y="' + p.y + '"' + '/>');
@@ -428,7 +419,7 @@
               }
               return _results;
             }).call(_this);
-            image_src = ($('#loadimage').val().split(/[\\/]+/)).slice(-1)[0];
+            image_src = ($('#loadimage').val().split(/[\\/]+/)).slice(-1)[0] || '<<<INSERT IMAGE URL HERE>>>';
             template = template.replace('<%image%>', image_src);
             template = template.replace('<%names%>', namelis.join('\n'));
             template = template.replace('<%areas%>', areas.join('\n'));
@@ -501,7 +492,7 @@
             valid = false;
             try {
               contents = JSON.parse(contents);
-              valid = _.all((function() {
+              valid = 'length' in contents && _.all((function() {
                 var _i, _len, _results;
                 _results = [];
                 for (_i = 0, _len = contents.length; _i < _len; _i++) {
@@ -513,7 +504,7 @@
             } catch (_error) {
               error = _error;
             }
-            if (valid) {
+            if (valid === true) {
               _this.names = contents;
             }
             help = $('#namesHelp');

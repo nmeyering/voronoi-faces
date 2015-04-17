@@ -167,8 +167,8 @@ class FaceApp
 			complete: (f) =>
 				@cells = ({
 						# floor these numbers?
-						x: (face.x + face.width / 2)
-						y: (face.y + face.height / 2)
+						x: (face.x + face.width / 2) << 0
+						y: (face.y + face.height / 2) << 0
 					} for face in f)
 				$('#detectfaces').prop 'disabled', false
 				@update()
@@ -230,7 +230,6 @@ class FaceApp
 
 		# don't look at this
 		$('#savehtml').click =>
-			console.dir @cells
 			polys = ({
 				points: (_.flatten cell.points)
 				id: cell.id
@@ -240,7 +239,7 @@ class FaceApp
 			$.get 'template.html', (template) =>
 				areas = (
 					'<area type="poly" href="javascript:;" coords="' +
-					((x << 0 for x in pt) for pt in p.points) + '"' +
+					(pt << 0 for pt in p.points) + '"' +
 					' data-id="' + p.id + '"' +
 					' data-x="' + p.x + '"' +
 					' data-y="' + p.y + '"' +
@@ -248,7 +247,7 @@ class FaceApp
 				namelis = (
 					"<li><span class=\"last\">#{n.last}</span>, " +
 					"<span class=\"first\">#{n.first}</span></li>" for n in @names)
-				image_src = ($('#loadimage').val().split /[\\/]+/)[-1..][0]
+				image_src = ($('#loadimage').val().split /[\\/]+/)[-1..][0] or '<<<INSERT IMAGE URL HERE>>>'
 				template = template.replace '<%image%>', image_src
 				template = template.replace '<%names%>', namelis.join '\n'
 				template = template.replace '<%areas%>', areas.join '\n'
@@ -289,10 +288,10 @@ class FaceApp
 				valid = false
 				try
 					contents = JSON.parse contents
-					valid = _.all ('first' of n and 'last' of n and 'id' of n for n in contents)
+					valid = 'length' of contents and _.all ('first' of n and 'last' of n and 'id' of n for n in contents)
 				catch error
 					# do nothing
-				if valid
+				if valid == true
 					@names = contents
 				help = $('#namesHelp')
 				help.removeClass()
