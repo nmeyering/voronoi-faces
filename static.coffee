@@ -9,7 +9,7 @@ $(document).ready ->
 				pointer = $('#pointer')
 				radius = pointer.width() // 2
 				offset = $('#faces').offset()
-				area = $('#facemap area[data-id="' + index + '"]')
+				area = $('#facemap area[data-id="' + (index + 1) + '"]')
 				x = parseInt area.attr 'data-x'
 				y = parseInt area.attr 'data-y'
 				pointer.css({
@@ -22,9 +22,11 @@ $(document).ready ->
 				$('#pointer').css {visibility: "hidden"}
 				$(this).removeClass('highlight'))
 
-	areas.each (index, area) ->
-		$(area).attr 'title', $(names[index]).text()
-		$(area).hover (->
+	areas.each (area) ->
+		id = parseInt $(this).attr 'data-id'
+		index = id - 1
+		$(this).attr 'title', $(names[index]).text()
+		$(this).hover (->
 				curName = $(names[index])
 				curName.addClass('highlight')
 				container = $('#names')

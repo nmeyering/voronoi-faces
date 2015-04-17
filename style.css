@@ -8,7 +8,7 @@ body
 	padding: 0;
 	margin: 0;
 	background-color: #444;
-	font-family: "PT Sans", "Sans";
+	font-family: "Times New Roman", "serif";
 }
 
 #content
@@ -25,15 +25,12 @@ body
 	vertical-align: top;
 	float: left;
 	margin: 1em;
-	border: 3px solid #ccc;
-	border-radius: 5px;
 	box-shadow: 5px 5px 25px #222;
 }
 
 #canvas
 {
-	margin-left: auto;
-	margin-right: auto;
+	border: 0px;
 }
 
 #picture
@@ -43,10 +40,12 @@ body
 
 #settings
 {
-	width: 15%;
+	max-width: 40em;
 	background-color: #222;
-	font-size: 14pt;
+	font-size: 12pt;
 	color: #aaa;
+	border: 3px solid #ccc;
+	border-radius: 5px;
 }
 
 #settings > *
@@ -75,3 +74,21 @@ input[type="button"],input[type="file"]
 	border-radius: 5px;
 }
 
+.help
+{
+	border-radius: 5px;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.error
+{
+	color: #fff;
+	background-color: #f00;
+}
+
+.info
+{
+	color: #000;
+	background-color: #82ff82;
+}

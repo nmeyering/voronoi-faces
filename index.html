@@ -12,6 +12,8 @@
 	<script type="text/javascript" src="underscore-min.js"></script>
 	<script type="text/javascript" src="rhill-voronoi-core.min.js"></script>
 	<script type="text/javascript" src="FileSaver.min.js"></script>
+	<script type="text/javascript" src="clip.js"></script>
+	<script type="text/javascript" src="init.js"></script>
 </head>
 <body>
 	<div id="content">
@@ -22,6 +24,11 @@
 			</p>
 			<ol>
 				<li>
+					Choose an image.
+					<p>
+						<input id="loadimage" type="file"/>
+					</p>
+				<li>
 					Press to reset and detect faces automatically. <strong>WARNING:</strong>
 					This might take some time. <br/>
 					<input id="detectfaces" disabled="disabled" type="button" value="Detect Faces"/>
@@ -29,28 +36,44 @@
 				<li>
 					Click to add a new point or Ctrl+Click (Cmd+Click) to remove the closest point.</li>
 				<li>
-					Press to switch to a printable mask mode. <br/>
+					You can toggle at any time to a print mode which displays numbers. <br/>
 					<p><input id="printview" disabled="disabled" type="button" value="print view"/></p>
 				</li>
-				<li>Right click &gt; Save Image</li>
+				<li>At this point, save your progress! Use Right click &gt; Save Image to save the print overlay of your original image and use this button to export the positions of the faces to a json file.<input id="savefile" type="button" value="Save as JSON"/>
+				<p>
+					Afterwards you can <em>Import</em> saved face positions again.
+					<input id="loadfile" type="file" accept="application/json" />
+				</p>
+				</li>
+				<li>
+					Produce a list of names. Maybe use crowdsourcing (e.g. Google Drive).
+					It has to be a JSON <em>array</em> of objects of the form <pre>{"id": "42", "first": "Oliver", "last": "Vornberger"}</pre>
+					If you did use Google Drive, you can use the provided vim commands <tt>convert_names.vim</tt> to convert a CSV file to the required JSON format. Just say <tt>:source convert_names.vim</tt>.
+				</li>
+				<li>
+					Now load the <em>correctly formatted </em> JSON name list here:
+					<p>
+						<input id="loadnames" type="file" accept="application/json"/>
+						<div id="namesHelp" class="help"></div>
+					</p>
+				</li>
+				<li>
+					(Optional) Define a clipping polygon.
+				</li>
+				<li>You're done! Now click the button below to export the finished page.</li>
 			</ol>
 			<div class="divider"></div>
 			<p>
-				<input id="savehtml" type="button" value="Save Map HTML"/>
+				<input id="savehtml" type="button" value="Export the finished HTML page"/>
 			</p>
 			<p>
-				<emph>Export</emph> to a file:
-				<input id="savefile" type="button" value="Save as JSON"/>
-			</p>
-			<p>
-				<emph>Import</emph> from one:
-				<input id="loadfile" type="file" accept="application/json" value="Load from JSON"/>
+				<input id="boundaryButton" type="button" value="edit boundary"/>
+				<input id="boundaryResetButton" type="button" value="reset boundary"/>
+				<div id="boundaryHelp" class="help info"></div>
 			</p>
 		</div>
 		<canvas id="canvas" width="800" height="600"></canvas>
 	</div>
-	<map name="facemap" id="facemap"></map>
-	<img id="picture" src="test.jpg"/>
-	<script src="init.js"></script>
+	<img id="picture" src="test.jpg" />
 </body>
 </html>
