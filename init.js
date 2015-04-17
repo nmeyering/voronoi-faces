@@ -390,7 +390,7 @@
             }
             return _results;
           }).call(_this);
-          return $.get('/template.html', function(template) {
+          return $.get('template.html', function(template) {
             var areas, image_src, n, namelis, output, p, pt, x;
             areas = (function() {
               var _i, _len, _results;

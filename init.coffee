@@ -237,7 +237,7 @@ class FaceApp
 				x: cell.x
 				y: cell.y
 			} for cell in @cells)
-			$.get '/template.html', (template) =>
+			$.get 'template.html', (template) =>
 				areas = (
 					'<area type="poly" href="javascript:;" coords="' +
 					((x << 0 for x in pt) for pt in p.points) + '"' +
