@@ -1,4 +1,4 @@
-$(document).ready ->
+$(window).load ->
 	names = $('#names li')
 	areas = $('#facemap area')
 	$('#footer').click ->
@@ -43,6 +43,7 @@ $(document).ready ->
 		id = parseInt $(@).attr 'data-id'
 		name = $("#names li[data-id=\"#{id}\"]")
 		$(@).attr 'title', name.text()
+		$(@).attr 'alt', name.text()
 		$(@).hover (->
 				name.addClass('highlight')
 				container = $('#names')

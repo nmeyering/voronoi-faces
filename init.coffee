@@ -15,6 +15,7 @@ class FaceApp
 		@printView = false
 		@editingBoundary = false
 		@boundary = []
+		@title = "Title"
 
 		@update()
 
@@ -238,7 +239,7 @@ class FaceApp
 			} for cell in @cells)
 			$.get 'template.html', (template) =>
 				areas = (
-					'<area type="poly" href="javascript:;" coords="' +
+					'<area shape="poly" href="javascript:;" coords="' +
 					(pt << 0 for pt in p.points) + '"' +
 					' data-id="' + p.id + '"' +
 					' data-x="' + p.x + '"' +
@@ -248,6 +249,7 @@ class FaceApp
 					"<li data-id=\"#{n.id}\"><span class=\"last\">#{n.last}</span>, " +
 					"<span class=\"first\">#{n.first}</span></li>" for n in @names)
 				image_src = ($('#loadimage').val().split /[\\/]+/)[-1..][0] or '<<<INSERT IMAGE URL HERE>>>'
+				template = template.replace /<%title%>/g, @title
 				template = template.replace '<%image%>', image_src
 				template = template.replace '<%names%>', namelis.join '\n'
 				template = template.replace '<%areas%>', areas.join '\n'
@@ -314,6 +316,9 @@ class FaceApp
 				reader.readAsDataURL file
 			else
 				# error
+		
+		$('#titleinput').change () =>
+			@title = $('#titleinput').val()
 
 $(document).ready ->
 	new FaceApp($('#canvas'), $('#picture'))

@@ -42,6 +42,7 @@
       this.printView = false;
       this.editingBoundary = false;
       this.boundary = [];
+      this.title = "Title";
       this.update();
       this.init();
     }
@@ -396,7 +397,7 @@
               results = [];
               for (i = 0, len = polys.length; i < len; i++) {
                 p = polys[i];
-                results.push('<area type="poly" href="javascript:;" coords="' + ((function() {
+                results.push('<area shape="poly" href="javascript:;" coords="' + ((function() {
                   var j, len1, ref, results1;
                   ref = p.points;
                   results1 = [];
@@ -420,6 +421,7 @@
               return results;
             }).call(_this);
             image_src = ($('#loadimage').val().split(/[\\\/]+/)).slice(-1)[0] || '<<<INSERT IMAGE URL HERE>>>';
+            template = template.replace(/<%title%>/g, _this.title);
             template = template.replace('<%image%>', image_src);
             template = template.replace('<%names%>', namelis.join('\n'));
             template = template.replace('<%areas%>', areas.join('\n'));
@@ -516,7 +518,7 @@
           return reader.readAsText(file);
         };
       })(this));
-      return $('#loadimage').change(function(e) {
+      $('#loadimage').change(function(e) {
         var file, imageType, reader;
         file = $('#loadimage')[0].files[0];
         imageType = /image.*/;
@@ -534,6 +536,11 @@
 
         }
       });
+      return $('#titleinput').change((function(_this) {
+        return function() {
+          return _this.title = $('#titleinput').val();
+        };
+      })(this));
     };
 
     return FaceApp;
