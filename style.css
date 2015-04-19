@@ -8,7 +8,7 @@ body
 	padding: 0;
 	margin: 0;
 	background-color: #444;
-	font-family: "Times New Roman", "serif";
+	font-family: "serif";
 }
 
 #content
@@ -17,20 +17,19 @@ body
 	margin-right: auto;
 	height: 100%;
 	width: 100%;
-	display: table-row;
 }
+
 #content > *
 {
-	display: table-cell;
+	display: inline-block;
 	vertical-align: top;
-	float: left;
-	margin: 1em;
 	box-shadow: 5px 5px 25px #222;
 }
 
 #canvas
 {
 	border: 0px;
+	margin: 1em;
 }
 
 #picture
@@ -40,11 +39,13 @@ body
 
 #settings
 {
+	float: left;
+	overflow-y: auto;
+	height: 100%;
 	max-width: 40em;
 	background-color: #222;
 	font-size: 12pt;
 	color: #aaa;
-	border: 3px solid #ccc;
 	border-radius: 5px;
 }
 
@@ -56,12 +57,6 @@ body
 #settings > ol > li
 {
 	margin: 1em;
-}
-
-
-input[type="button"],input[type="file"]
-{
-	font-size: 12pt;
 }
 
 .divider

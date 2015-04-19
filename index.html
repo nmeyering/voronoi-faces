@@ -19,10 +19,17 @@
 	<a href="https://github.com/nmeyering/voronoi-faces/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
 	<div id="content">
 		<div id="settings">
-			<h2>Usage</h2>
+			<h2>What am I looking at?</h2>
 			<p>
-			This is a tool to help you tag faces in a photo and and automatically define image regions to be used to associate with names, e.g. to display them when hovering over.
+				This is a tool to help you tag faces in a photo and and automatically define image regions to be associated with names, i.e. to display them when hovering over.
 			</p>
+			<p>
+				It was made for a very specific use case I had, but it may be useful for your purposes too.
+			</p>
+			<p>
+				Everything works client-side, you only need a web server if you want to host the finished web page.
+			</p>
+			<h2>Step-by-Step Usage Guide</h2>
 			<ol>
 				<li>
 					Choose an image.
@@ -30,47 +37,61 @@
 						<input id="loadimage" type="file"/>
 					</p>
 				<li>
-					Press to reset and detect faces automatically. <strong>WARNING:</strong>
+					Press to reset and detect faces automatically. <strong>Don't Panic!</strong>
 					This might take some time. <br/>
+					<p>
 					<input id="detectfaces" disabled="disabled" type="button" value="Detect Faces"/>
+					</p>
 				</li>
 				<li>
 					Click to add a new point or Ctrl+Click (Cmd+Click) to remove the closest point.</li>
 				<li>
-					You can toggle at any time to a print mode which displays numbers. <br/>
+					You can toggle at any time to a print mode which overlays the numbers. They are sorted roughly from top to bottom, left to right.
 					<p><input id="printview" disabled="disabled" type="button" value="print view"/></p>
 				</li>
-				<li>At this point, save your progress! Use Right click &gt; Save Image to save the print overlay of your original image and use this button to export the positions of the faces to a json file.<input id="savefile" type="button" value="Save as JSON"/>
+				<li>
+					[Optional] Define a boundary (clipping) polygon.
+					<p>
+						<input id="boundaryButton" type="button" value="edit boundary"/>
+						<input id="boundaryResetButton" type="button" value="reset boundary"/>
+						<div id="boundaryHelp" class="help info"></div>
+					</p>
+				</li>
+				<li>At this point, save your progress! Use Right click &gt; Save Image to save the print overlay of your original image and use this button to export the positions of the faces to a JSON file.
+					<p>
+					<input id="savefile" type="button" value="Save as JSON"/>
+					</p>
 				<p>
-					Afterwards you can <em>Import</em> saved face positions again.
+					Afterwards you can <em>Import</em> the saved face positions and boundary polygon again.
+					<p>
 					<input id="loadfile" type="file" accept="application/json" />
+					</p>
 				</p>
 				</li>
 				<li>
-					Produce a list of names. Maybe use crowdsourcing (e.g. Google Drive).
-					It has to be a JSON <em>array</em> of objects of the form <pre>{"id": "42", "first": "Oliver", "last": "Vornberger"}</pre>
-					If you did use Google Drive, you can use the provided vim commands <tt>convert_names.vim</tt> to convert a CSV file to the required JSON format. Just say <tt>:source convert_names.vim</tt>.
+					Produce a list of names.
+					It has to be a JSON <em>array</em> of objects of the form <pre>{"id": "42", "first": "Richard M.", "last": "Stallman"}</pre>
+					<small>
+					If you happen to have used e.g. Google Spreadsheets and you use vim, you can use the vim commands I used (<tt>convert_names.vim</tt>) to convert a CSV file to the required JSON format. Just say <tt>:source convert_names.vim</tt>.
+					</small>
 				</li>
 				<li>
-					Now load the <em>correctly formatted </em> JSON name list here:
+					Now load the JSON file with the name list here:
 					<p>
 						<input id="loadnames" type="file" accept="application/json"/>
 						<div id="namesHelp" class="help"></div>
 					</p>
 				</li>
 				<li>
-					(Optional) Define a clipping polygon.
+					You're done! Click the button below to export the finished page. You will now want to define a proper title for your web page and maybe reorder the names or add dividers in between. Names can be put in any order, this doesn't affect the highlighting.
+					<p>
+						In order to host the site, point your webserver to folder with all the relevant files: output.html, static.js, static.css and the image you selected. No server side scripting of any kind required. That's it.
+					</p>
 				</li>
-				<li>You're done! Now click the button below to export the finished page.</li>
 			</ol>
 			<div class="divider"></div>
 			<p>
 				<input id="savehtml" type="button" value="Export the finished HTML page"/>
-			</p>
-			<p>
-				<input id="boundaryButton" type="button" value="edit boundary"/>
-				<input id="boundaryResetButton" type="button" value="reset boundary"/>
-				<div id="boundaryHelp" class="help info"></div>
 			</p>
 		</div>
 		<canvas id="canvas" width="800" height="600"></canvas>
