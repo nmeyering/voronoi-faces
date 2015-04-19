@@ -5,153 +5,27 @@
 	<head>
 		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-		<style type="text/css">
-body, html
-{
-	height: 100%;
-}
-
-body
-{
-	/*
-	   background-color: #222;
-	   color: #888;
-	 */
-	font-family: "PT Sans", "Sans";
-	margin: 0px;
-}
-
-#content
-{
-	height: 100%;
-}
-
-#content > *
-{
-	vertical-align: baseline;
-}
-
-h1
-{
-	margin: 0;
-	text-align: center;
-}
-
-ul
-{
-	list-style-type: square;
-}
-
-#names
-{
-	height: 90%;
-	float: right;
-	width: 10%;
-	overflow-y: scroll;
-}
-
-#faces
-{
-	float: left;
-}
-
-.highlight
-{
-	background-color: pink;
-}
-
-img
-{
-	z-index: -1;
-}
-
-.divider
-{
-	margin-left: 1em;
-	margin-right: 1em;
-	background: #fff;
-	height: 0px;
-	border: 3px solid #ccc;
-	border-radius: 5px;
-}
-
-#pointer
-{
-	visibility: hidden;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	height: 50px;
-	width: 50px;
-	background-color: rgba(255,255,255,0.0);
-	border: 3px solid white;
-	border-radius: 50px;
-	box-shadow: 0px 0px 50px 25px black;
-}
-		</style>
+		<link href="static.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<div id="pointer"></div>
 		<div id="content">
-			<h1>Algorithmenfoto Test WS 2014</h1>
-			<img id="faces" src="<%image%>" usemap="#facemap"/>
+			<h1 id="heading"><%title%></h1>
+			<div id="left">
+				<div id="pointer"></div>
+				<div id="faces">
+					<img src="<%image%>" usemap="#facemap"/>
+				</div>
+			</div>
 			<div id="names">
 				<ol>
-					<%names%>
+<!-- div class="divider"></div -->
+<%names%>
 				</ol>
 			</div>
 		</div>
 		<map name="facemap" id="facemap">
-			<%areas%>
+<%areas%>
 		</map>
-		<script type="text/javascript">
-(function() {
-	$(document).ready(function() {
-		var areas, names;
-		names = $('#names li');
-		areas = $('#facemap area');
-		names.each(function(index, name) {
-			return $(name).hover((function() {
-				var area, offset, pointer, radius, x, y;
-				$(this).addClass('highlight');
-				pointer = $('#pointer');
-				radius = Math.floor(pointer.width() / 2);
-				offset = $('#faces').offset();
-				area = $('#facemap area[data-id="' + (index + 1) + '"]');
-				x = parseInt(area.attr('data-x'));
-				y = parseInt(area.attr('data-y'));
-				return pointer.css({
-					visibility: "visible",
-					left: offset.left + x - radius,
-					top: offset.top + y - radius
-				});
-			}), (function() {
-				$('#pointer').css({
-					visibility: "hidden"
-				});
-				return $(this).removeClass('highlight');
-			}));
-		});
-		return areas.each(function(area) {
-			var id, index;
-			id = parseInt($(this).attr('data-id'));
-			index = id - 1;
-			$(this).attr('title', $(names[index]).text());
-			return $(this).hover((function() {
-				var container, curName;
-				curName = $(names[index]);
-				curName.addClass('highlight');
-				container = $('#names');
-				return container.animate({
-					scrollTop: curName.offset().top - container.offset().top + container.scrollTop()
-				}, 32);
-			}), (function() {
-				return $(names[index]).removeClass('highlight');
-			}));
-		});
-	});
-
-}).call(this);
-		</script>
+		<script type="text/javascript" src="static.js"></script>
 	</body>
 </html>
