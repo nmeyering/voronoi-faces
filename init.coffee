@@ -245,7 +245,7 @@ class FaceApp
 					' data-y="' + p.y + '"' +
 					'/>' for p in polys)
 				namelis = (
-					"<li><span class=\"last\">#{n.last}</span>, " +
+					"<li data-id=\"#{n.id}\"><span class=\"last\">#{n.last}</span>, " +
 					"<span class=\"first\">#{n.first}</span></li>" for n in @names)
 				image_src = ($('#loadimage').val().split /[\\/]+/)[-1..][0] or '<<<INSERT IMAGE URL HERE>>>'
 				template = template.replace '<%image%>', image_src
