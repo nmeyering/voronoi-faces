@@ -2,7 +2,8 @@ $(window).load ->
 	names = $('#names li')
 	areas = $('#facemap area')
 	$('#footer').click ->
-		$(@).hide()
+		$(@).slideUp()
+	$('#footer').slideDown()
 	pointer_radius = 60
 	$('#pointer').css {
 		width: pointer_radius + "px"
